@@ -1,0 +1,22 @@
+image: rockylinux/rockylinux:9
+
+stages:
+  - build
+
+iso-build:
+  stage: build
+  before_script:
+    - cat /etc/os-release
+    - dnf -y install gcc gcc-c++ make cmake tar
+    - dnf -y install squashfs-tools e2fsprogs dosfstools gdisk tar xorriso parted make rsync
+
+  script:
+    - make utils/mkiso
+
+  artifacts:
+    name: "${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
+    paths:
+      - build/*.iso
+    expire_in: 1 month
+
+  when: manual

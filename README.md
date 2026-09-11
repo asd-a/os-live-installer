@@ -1,6 +1,11 @@
-## intro
+## Intro
 
 用于构建安装 Rocky SCC Linux 的 live cd iso，以及构建脚本
+
+需要在 Rocky Linux 下使用，依赖：
+```
+dnf install -y squashfs-tools e2fsprogs dosfstools gdisk tar xorriso parted make rsync
+```
 
 ### Live CD
 
