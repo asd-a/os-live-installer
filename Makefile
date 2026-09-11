@@ -46,7 +46,7 @@ utils/bootstrap:
 
 	rm -rf tmp/bootstrap
 
-build/rootfs.tar.xz: packages/basic.txt packages/kernel.txt $(shell find ./common -type f)
+build/rootfs.tar.zst: packages/basic.txt packages/kernel.txt $(shell find ./common -type f)
 	mkdir -p build
 
 	${MAKE} utils/bootstrap
@@ -106,9 +106,9 @@ build/label:
 	mkdir -p build
 	./scripts/label.sh > $@
 
-utils/mkrootfs: build/rootfs.tar.xz
+utils/mkrootfs: build/rootfs.tar.zst
 
-build/%.iso: build/label build/rootfs.tar.xz packages/live-os.txt
+build/%.iso: build/label build/rootfs.tar.zst packages/live-os.txt
 	mkdir -p tmp/iso/LiveOS/
 	mkdir -p tmp/live-os/boot/efi
 
@@ -119,7 +119,7 @@ build/%.iso: build/label build/rootfs.tar.xz packages/live-os.txt
 	mount -o loop,fmask=027,umask=027 tmp/iso/efiboot.img tmp/live-os/boot/efi
 	
 	@echo "Bootstrapping Debian into tmp/live-os"
-	tar --xattrs --acls -xapf build/rootfs.tar.xz -C tmp/live-os
+	tar --xattrs --acls -xapf build/rootfs.tar.zst -C tmp/live-os
 
 	./scripts/chroot.sh -r tmp/live-os systemd-machine-id-setup
 	./scripts/chroot.sh -r tmp/live-os systemd-machine-id-setup --commit
@@ -166,7 +166,7 @@ utils/mksys:
 	
 	${MAKE} utils/mount
 
-	tar --xattrs --acls -xapf build/rootfs.tar.xz -C tmp/mnt
+	tar --xattrs --acls -xapf build/rootfs.tar.zst -C tmp/mnt
 
 	./scripts/chroot.sh -r tmp/mnt systemd-machine-id-setup
 	./scripts/chroot.sh -r tmp/mnt systemd-machine-id-setup --commit
