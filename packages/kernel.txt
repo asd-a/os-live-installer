@@ -1,0 +1,64 @@
+# [initramfs]
+dracut
+dracut-tools
+
+# [kernel]
+dkms
+kmod
+kernel
+kernel-devel-matched
+kernel-lt
+kernel-lt-devel-matched
+linux-firmware
+
+# [shell]
+bash
+dash
+zsh
+fish
+clustershell
+openssh
+openssh-clients
+openssh-server
+
+# [fs]
+zfs
+zfs-dkms
+nfs-utils
+
+# [tools]
+perf
+htop
+tmux
+patch
+lshw
+lsof
+rsync
+pciutils
+dmidecode
+numactl
+hwloc
+nvtop
+ipmitool
+OpenIPMI
+strace
+tree
+diffutils
+
+# [develop]
+gcc
+gcc-c++
+gcc-gfortran
+make
+
+# [network]
+iproute
+iputils
+iptables-utils
+ethtool
+systemd-networkd
+systemd-resolved
+systemd-timesyncd
+
+# [boot]
+systemd-boot

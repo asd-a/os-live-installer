@@ -1,0 +1,50 @@
+# [base]
+sudo
+info
+tzdata
+dnf
+rpm
+coreutils
+util-linux
+
+# [https]
+ca-certificates
+
+# [terminal]
+dialog
+bash
+less
+
+# [editor]
+vim
+neovim
+nano
+
+# [tools]
+curl
+wget
+git
+git-lfs
+make
+gpg
+openssl
+zstd
+
+# [fs]
+dosfstools
+e2fsprogs
+btrfs-progs
+xfsprogs
+fuse
+ntfs-3g
+gdisk
+
+# [compress]
+unzip
+zip
+tar
+
+# [systemd]
+systemd
+systemd-pam
+systemd-udev
