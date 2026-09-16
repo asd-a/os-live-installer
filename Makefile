@@ -57,7 +57,7 @@ build/rootfs.tar.zst: packages/basic.txt packages/kernel.txt $(shell find ./comm
 	${DNF} config-manager --set-enable elrepo-kernel
 
 	./scripts/chroot.sh tmp/rootfs \
-	${DNF} makecache
+	${DNF} clean all
 
 	./scripts/chroot.sh tmp/rootfs \
 	${DNF} update
@@ -112,7 +112,7 @@ build/%.iso: build/label build/rootfs.tar.zst packages/live-os.txt
 	mkdir -p tmp/iso/LiveOS/
 	mkdir -p tmp/live-os/boot/efi
 
-	rsync -rva --exclude="/tmp" --exclude="/.git" --exclude="/build/*.iso" ./ tmp/iso/data/
+	rsync -rva --exclude="/tmp" --exclude="/.git*" --exclude="/build/*.iso" ./ tmp/iso/data/
 	
 	truncate -s 256M tmp/iso/efiboot.img
 	mkfs.fat -F32 tmp/iso/efiboot.img
@@ -126,10 +126,13 @@ build/%.iso: build/label build/rootfs.tar.zst packages/live-os.txt
 
 	./scripts/liveos-cmdline.sh build/label > tmp/live-os/etc/kernel/cmdline
 
+	cp -r ./livecd/etc/. tmp/live-os/etc/
+
+	./scripts/chroot.sh -r tmp/live-os \
+	${DNF} clean all
+
 	./scripts/chroot.sh -r tmp/live-os \
 	${DNF} install `./scripts/packages.sh ./packages/live-os.txt`
-
-	cp -r ./livecd/etc/. tmp/live-os/etc/
 
 	./scripts/chroot.sh -r tmp/live-os bootctl install --no-variables
 	./scripts/chroot.sh -r tmp/live-os /bin/bash -c "`cat ./scripts/kernel-add-all.sh`"
