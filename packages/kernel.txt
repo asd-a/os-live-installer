@@ -7,8 +7,6 @@ dkms
 kmod
 kernel
 kernel-devel-matched
-kernel-lt
-kernel-lt-devel-matched
 linux-firmware
 
 # [shell]
@@ -61,4 +59,4 @@ systemd-resolved
 systemd-timesyncd
 
 # [boot]
-systemd-boot
+systemd-boot-unsigned

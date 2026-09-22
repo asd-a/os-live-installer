@@ -1,17 +1,18 @@
 ## Intro
 
-用于构建安装 Rocky SCC Linux 的 live cd iso，以及构建脚本
+用于构建和安装 Rocky Linux 10 SCC 系统的 UEFI Live ISO。
 
-需要在 Rocky Linux 下使用，依赖：
+在 Rocky Linux 10 构建机上以 root 权限运行。x86_64 目标机器必须支持
+x86-64-v3。构建依赖：
 ```
 dnf install -y squashfs-tools e2fsprogs dosfstools gdisk tar xorriso parted make rsync
 ```
 
 ### Live CD
 
-在 Rocky 系统上（最好大于等于 rocky 9）使用 root 权限执行：
+在 Rocky Linux 10 系统上使用 root 权限执行：
 ```
-make utils/mkiso
+make utils/mkiso ROCKY_VER=10
 ```
 在 `build` 文件夹中生成可以直接 efi 启动的 `ROCKY_SCC_YYYY-MM-DD.iso`
 

@@ -1,4 +1,4 @@
-ROCKY_VER ?= 9
+ROCKY_VER ?= 10
 
 default: clean-tmp
 
@@ -54,7 +54,7 @@ build/rootfs.tar.zst: packages/basic.txt packages/kernel.txt $(shell find ./comm
 	@echo "Build Rocky rootfs into tmp/rootfs"
 
 	./scripts/chroot.sh tmp/rootfs \
-	${DNF} config-manager --set-enable elrepo-kernel
+	${DNF} config-manager --set-enabled crb
 
 	./scripts/chroot.sh tmp/rootfs \
 	${DNF} clean all

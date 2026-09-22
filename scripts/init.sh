@@ -18,19 +18,13 @@ dnf \
     util-linux \
     rocky-release rocky-repos rocky-gpg-keys \
     epel-release \
-    https://zfsonlinux.org/epel/zfs-release-3-0.el$2.noarch.rpm \
-    https://www.elrepo.org/elrepo-release-$2.el$2.elrepo.noarch.rpm
+    https://zfsonlinux.org/epel/zfs-release-3-0.el$2.noarch.rpm
 
 # repo change to tuna or sjtu
 sed -e 's|^mirrorlist=|#mirrorlist=|g' \
     -e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirror.sjtu.edu.cn/rocky|g' \
     -i.bak \
     $root_dir/etc/yum.repos.d/rocky*.repo
-
-sed -e 's|^mirrorlist=|#mirrorlist=|g' \
-    -e 's|^baseurl=http://elrepo.org/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/elrepo|g' \
-    -i.bak \
-    $root_dir/etc/yum.repos.d/elrepo.repo
 
 sed -e 's!^metalink=!#metalink=!g' \
     -e 's!^#baseurl=!baseurl=!g' \

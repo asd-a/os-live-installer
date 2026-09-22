@@ -1,4 +1,4 @@
-image: rockylinux/rockylinux:9
+image: rockylinux/rockylinux:10
 
 stages:
   - build
@@ -11,7 +11,7 @@ iso-build:
     - dnf -y install squashfs-tools e2fsprogs dosfstools gdisk tar xorriso parted make rsync
 
   script:
-    - make utils/mkiso
+    - make utils/mkiso ROCKY_VER=10
 
   artifacts:
     name: "${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
