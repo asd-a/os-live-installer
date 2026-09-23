@@ -7,7 +7,12 @@ dkms
 kmod
 kernel
 kernel-devel-matched
+kernel-headers
 linux-firmware
+
+# [nvidia driver]
+nvidia-driver-cuda
+kmod-nvidia-open-dkms
 
 # [shell]
 bash

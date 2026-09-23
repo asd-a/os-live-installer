@@ -5,5 +5,5 @@ set -e
 label=$(cat $1)
 
 cat <<EOF
-root=live:LABEL=$label rd.live.image rw console=tty0 console=ttyS0,115200n8
+root=live:LABEL=$label rd.live.image rw console=tty0 console=ttyS0,115200n8 rd.driver.blacklist=nouveau modprobe.blacklist=nouveau
 EOF

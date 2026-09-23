@@ -1,4 +1,6 @@
 ROCKY_VER ?= 10
+KERNEL_VERSION = 6.12.0-211.56.1.el10_2.0.1.x86_64
+NVIDIA_VERSION = 580.178.04
 
 default: clean-tmp
 
@@ -46,7 +48,7 @@ utils/bootstrap:
 
 	rm -rf tmp/bootstrap
 
-build/rootfs.tar.zst: packages/basic.txt packages/kernel.txt $(shell find ./common -type f)
+build/rootfs.tar.zst: Makefile packages/basic.txt packages/kernel.txt $(shell find ./common -type f)
 	mkdir -p build
 
 	${MAKE} utils/bootstrap
@@ -66,7 +68,37 @@ build/rootfs.tar.zst: packages/basic.txt packages/kernel.txt $(shell find ./comm
 	${DNF} install `./scripts/packages.sh ./packages/basic.txt`
 
 	./scripts/chroot.sh tmp/rootfs \
+	${DNF} config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel10/x86_64/cuda-rhel10.repo
+
+	./scripts/chroot.sh tmp/rootfs \
+	${DNF} install python3-dnf-plugin-versionlock
+
+	# Lock before dependency resolution; keep these locks in the installed system.
+	./scripts/chroot.sh tmp/rootfs \
+	${DNF} versionlock add --raw \
+		"kernel-0:${KERNEL_VERSION}" \
+		"kernel-core-0:${KERNEL_VERSION}" \
+		"kernel-modules-0:${KERNEL_VERSION}" \
+		"kernel-modules-core-0:${KERNEL_VERSION}" \
+		"kernel-devel-0:${KERNEL_VERSION}" \
+		"kernel-devel-matched-0:${KERNEL_VERSION}" \
+		"kernel-headers-0:${KERNEL_VERSION}" \
+		"kmod-nvidia-open-dkms-3:${NVIDIA_VERSION}-*" \
+		"nvidia-driver*-3:${NVIDIA_VERSION}-*" \
+		"nvidia-kmod-common-3:${NVIDIA_VERSION}-*" \
+		"nvidia-modprobe-3:${NVIDIA_VERSION}-*" \
+		"nvidia-persistenced-3:${NVIDIA_VERSION}-*" \
+		"libnvidia-ml-3:${NVIDIA_VERSION}-*" \
+		"libnvidia-cfg-3:${NVIDIA_VERSION}-*"
+
+	./scripts/chroot.sh tmp/rootfs \
 	${DNF} install `./scripts/packages.sh ./packages/kernel.txt`
+
+	# chroot shares the builder's running kernel: always select the image kernel.
+	./scripts/chroot.sh tmp/rootfs dkms install -m nvidia -v "${NVIDIA_VERSION}" -k "${KERNEL_VERSION}"
+	./scripts/chroot.sh tmp/rootfs depmod "${KERNEL_VERSION}"
+	test "`./scripts/chroot.sh tmp/rootfs modinfo -k "${KERNEL_VERSION}" -F version nvidia`" = "${NVIDIA_VERSION}"
+	test "`./scripts/chroot.sh tmp/rootfs modinfo -k "${KERNEL_VERSION}" -F version nvidia_uvm`" = "${NVIDIA_VERSION}"
 
 	./scripts/chroot.sh -r tmp/rootfs rm /etc/machine-id
 	
