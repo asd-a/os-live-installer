@@ -100,6 +100,11 @@ build/rootfs.tar.zst: Makefile packages/basic.txt packages/kernel.txt $(shell fi
 	test "`./scripts/chroot.sh tmp/rootfs modinfo -k "${KERNEL_VERSION}" -F version nvidia`" = "${NVIDIA_VERSION}"
 	test "`./scripts/chroot.sh tmp/rootfs modinfo -k "${KERNEL_VERSION}" -F version nvidia_uvm`" = "${NVIDIA_VERSION}"
 
+	# Inspect the image kernel's inbox RDMA modules without loading them.
+	for module in mlx5_core mlx5_ib ib_core ib_uverbs rdma_cm; do \
+		./scripts/chroot.sh tmp/rootfs modinfo -k "${KERNEL_VERSION}" "$$module" > /dev/null || exit 1; \
+	done
+
 	./scripts/chroot.sh -r tmp/rootfs rm /etc/machine-id
 	
 	./scripts/chroot.sh -r tmp/rootfs cp -a /etc/skel/. /root/

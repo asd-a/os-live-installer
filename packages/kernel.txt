@@ -63,5 +63,13 @@ systemd-networkd
 systemd-resolved
 systemd-timesyncd
 
+# [rdma]
+rdma-core
+libibverbs
+librdmacm
+libibverbs-utils
+infiniband-diags
+perftest
+
 # [boot]
 systemd-boot-unsigned
