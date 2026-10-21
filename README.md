@@ -47,8 +47,8 @@ make utils/umount
 ```
 
 ### TODO
- - [] 简要 locale + tzdata 配置
- - [] 网络配置
- - [] nvidia 驱动
- - [] root on zfs / other fs
- - [] 更多交互
+- [ ] 简要 locale + tzdata 配置
+- [ ] 网络配置
+- [x] nvidia 驱动
+- [ ] root on zfs / other fs
+- [ ] 更多交互
